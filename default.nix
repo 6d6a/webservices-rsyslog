@@ -58,7 +58,7 @@ in pkgs.dockerTools.buildLayeredImage rec {
     tzdata
   ];
   config = {
-    Entrypoint = [ "${rsyslog}/sbin/rsyslogd" "-f" "/etc/rsyslog.conf" "-d" "-n" ];
+    Entrypoint = [ "${rsyslog}/sbin/rsyslogd" "-f" "/etc/rsyslog.conf" "-n" ];
     Env = [
       "TZ=:/etc/localtime"
       "CRON_TZ=Europe/Moscow"
