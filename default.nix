@@ -29,7 +29,7 @@ let
     init = false;
     read_only = true;
     network = "host";
-    tmpfs = [ "/tmp:mode=1777" "/run/bin:exec,suid" "/run/rsyslog=1777" ];
+    tmpfs = [ "/tmp:mode=1777" "/run/bin:exec,suid" "/run/rsyslog:mode=1777" ];
     volumes = [
       ({
         type = "bind";
