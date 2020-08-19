@@ -38,8 +38,8 @@ let
       })
       ({
         type = "bind";
-        source = "/opt/dev";
-        target = "/opt/dev";
+        source = "/opt/run";
+        target = "/opt/run";
       })
 
       ({
