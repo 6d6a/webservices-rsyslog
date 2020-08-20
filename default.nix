@@ -56,6 +56,7 @@ in pkgs.dockerTools.buildLayeredImage rec {
     rootfs
     rsyslog
     tzdata
+    locale
   ];
   config = {
     Entrypoint = [ "${rsyslog}/sbin/rsyslogd" "-f" "/etc/rsyslog.conf" "-n" ];
@@ -63,6 +64,9 @@ in pkgs.dockerTools.buildLayeredImage rec {
       "TZ=:/etc/localtime"
       "CRON_TZ=Europe/Moscow"
       "TZDIR=${tzdata}/share/zoneinfo"
+      "LOCALE_ARCHIVE_2_27=${locale}/lib/locale/locale-archive"
+      "LOCALE_ARCHIVE=${locale}/lib/locale/locale-archive"
+      "LC_ALL=ru_RU.UTF-8"
     ];
     Labels = flattenSet rec {
       ru.majordomo.docker.arg-hints-json = builtins.toJSON dockerArgHints;
