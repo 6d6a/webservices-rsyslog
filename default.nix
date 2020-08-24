@@ -29,7 +29,7 @@ let
     init = false;
     read_only = true;
     network = "host";
-    tmpfs = [ "/tmp:mode=1777" "/run/bin:exec,suid" "/run/rsyslog:mode=1777" ];
+    tmpfs = [ "/tmp:mode=1777" ];
     volumes = [
       ({
         type = "bind";
@@ -54,12 +54,12 @@ in pkgs.dockerTools.buildLayeredImage rec {
   tag = "latest";
   contents = [
     rootfs
-    rsyslog
+    syslogng
     tzdata
     locale
   ];
   config = {
-    Entrypoint = [ "${rsyslog}/sbin/rsyslogd" "-f" "/etc/rsyslog.conf" "-n" ];
+    Entrypoint = [ "${syslogng}/bin/syslog-ng" "-f" "${rootfs}/etc/syslog-ng.conf" "-R" "/run/syslog-ng.persist" "-c" "/run/syslog-ng.ctl" "--pidfile=/run/syslog-ng.pid" "--foreground" ];
     Env = [
       "TZ=:/etc/localtime"
       "CRON_TZ=Europe/Moscow"
