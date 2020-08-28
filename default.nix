@@ -1,23 +1,31 @@
-{ ref ? "master" }:
+{ nixpkgs ? (import <nixpkgs> { }).fetchgit {
+  url = "https://github.com/NixOS/nixpkgs.git";
+  rev = "ce9f1aaa39ee2a5b76a9c9580c859a74de65ead5";
+  sha256 = "1s2b9rvpyamiagvpl5cggdb2nmx4f7lpylipd397wz8f0wngygpi";
+}, overlayUrl ? "git@gitlab.intr:_ci/nixpkgs.git", overlayRef ? "master" }:
 
-with import <nixpkgs> {
+with import nixpkgs {
   overlays = [
-    (import (builtins.fetchGit {
-      url = "git@gitlab.intr:_ci/nixpkgs.git";
-      inherit ref;
-    }))
+    (self: super:
+      with super; rec {
+        overlayed = (import nixpkgs {
+          overlays = [
+            (import (builtins.fetchGit {
+              url = "https://gitlab.intr/_ci/nixpkgs";
+              ref = "master";
+            }))
+          ];
+        });
+      })
   ];
 };
 
 let
 
-  inherit (builtins) concatMap getEnv toJSON;
+  inherit (builtins) toJSON;
   inherit (dockerTools) buildLayeredImage;
-  inherit (lib)
-    concatMapStringsSep firstNChars flattenSet dockerRunCmd mkRootfs;
-  inherit (lib.attrsets) collect isDerivation;
-  inherit (stdenv) mkDerivation;
-
+  inherit (lib) concatMapStringsSep;
+  inherit (overlayed.lib) dockerRunCmd flattenSet mkRootfs;
 
   rootfs = mkRootfs {
     name = "rsyslog-rootfs";
