@@ -21,10 +21,12 @@
 
       defaultPackage.x86_64-linux = self.packages.x86_64-linux.container;
 
-      packages.x86_64-linux.deploy = majordomo.outputs.deploy { tag = "webservices/rsyslog"; impure = true; };
-
-      devShell.x86_64-linux = pkgs-unstable.mkShell {
-        buildInputs = [ pkgs-unstable.nixUnstable ];
+      packages.x86_64-linux.deploy = majordomo.outputs.deploy {
+        tag = "webservices/rsyslog";
+        impure = true;
       };
+
+      devShell.x86_64-linux =
+        pkgs-unstable.mkShell { buildInputs = [ pkgs-unstable.nixUnstable ]; };
     };
 }

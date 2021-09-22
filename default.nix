@@ -31,7 +31,6 @@ let
         source = "/opt/run";
         target = "/opt/run";
       })
-
       ({
         type = "tmpfs";
         target = "/run";
@@ -42,14 +41,16 @@ let
 in pkgs.dockerTools.buildLayeredImage rec {
   name = "docker-registry.intr/webservices/rsyslog";
   tag = "latest";
-  contents = [
-    rootfs
-    syslogng
-    tzdata
-    locale
-  ];
+  contents = [ rootfs syslogng tzdata locale ];
   config = {
-    Entrypoint = [ "${syslogng}/bin/syslog-ng" "-f" "${rootfs}/etc/syslog-ng.conf" "-R" "/run/syslog-ng.persist" "-c" "/run/syslog-ng.ctl" "--pidfile=/run/syslog-ng.pid" "--foreground" ];
+    Entrypoint = [
+      "${syslogng}/bin/syslog-ng"
+      "-f" "${rootfs}/etc/syslog-ng.conf"
+      "-R" "/run/syslog-ng.persist"
+      "-c" "/run/syslog-ng.ctl"
+      "--pidfile=/run/syslog-ng.pid"
+      "--foreground"
+    ];
     Env = [
       "TZ=:/etc/localtime"
       "CRON_TZ=Europe/Moscow"
@@ -64,7 +65,4 @@ in pkgs.dockerTools.buildLayeredImage rec {
       ru.majordomo.docker.exec.reload-cmd = "/bin/true";
     };
   };
-#  extraCommands = ''
-#    ln -s ${tzdata}/share/zoneinfo/Europe/Moscow etc/localtime
-#  '';
 }
