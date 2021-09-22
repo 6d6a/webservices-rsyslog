@@ -1,4 +1,4 @@
-Docker container with [[\[\[https://www.rsyslog.com/\]\[The rocket-fast Syslog Server - rsyslog\]\]][RSyslog]] build by [[https://nixos.org/][Nix package manager]].
+Docker container with [[https://www.rsyslog.com/][RSyslog]] build by [[https://nixos.org/][Nix package manager]].
 
 * Requirements
 
